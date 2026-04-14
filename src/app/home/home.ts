@@ -1,10 +1,10 @@
 import { Component } from '@angular/core';
-import { HousingLocation } from '../housing-location/housing-location';
 import { HousingLocationInfo } from '../housinglocation';
+import { SchedulerTest } from "../scheduler-test/scheduler-test";
 
 @Component({
   selector: 'app-home',
-  imports: [HousingLocation],
+  imports: [SchedulerTest],
   template: `
     <section>
       <form>
@@ -14,7 +14,7 @@ import { HousingLocationInfo } from '../housinglocation';
     </section>
   
     <section class="results">
-      <app-housing-location [housingLocation]="housingLocation" />
+      <scheduler-test />
     </section>
   `,
   styleUrls: ['./home.css'],

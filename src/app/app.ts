@@ -1,5 +1,7 @@
-import {Component} from '@angular/core';
+import {Component, NgModule} from '@angular/core';
 import {Home} from './home/home';
+import { DxSchedulerModule } from "devextreme-angular/ui/scheduler";
+import { DxPopupModule } from 'devextreme-angular';
 
 @Component({
   selector: 'app-root',
@@ -18,3 +20,10 @@ import {Home} from './home/home';
 })
 
 export class App {}
+
+@NgModule({
+  declarations: [],
+  imports: [DxSchedulerModule, App, DxPopupModule],
+  bootstrap: [],
+})
+export class AppModule {}

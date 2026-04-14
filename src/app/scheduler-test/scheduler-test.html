@@ -1,0 +1,92 @@
+<dx-scheduler id="scheduler"
+    timeZone="Europe/Berlin"
+    [dataSource]="appointments"
+    [editing]="{allowAdding: true, allowUpdating: true}"
+    textExpr="text"
+    startDateExpr="startDate"
+    endDateExpr="endDate"
+    recurrenceRuleExpr="recurrenceRule"
+    currentView="month"
+    dateSerializationFormat="yyyy-MM-dd HH:mm"
+    (onAppointmentFormOpening)="onAppointmentFormOpening($event)"
+    (onAppointmentAdding)="onAppointmentAdding($event)"
+>
+    <dxi-scheduler-view type="month"></dxi-scheduler-view>
+    <dxo-scheduler-editing #editingOptions [allowAdding]="true" [allowDeleting]="true" [allowUpdating]="true" [allowDragging]="true" [popup]="popupOptions">
+        <dxo-scheduler-form [labelMode]="'static'" [onFieldDataChanged]="onChange">
+            <!-- Titel der Serie -->
+            <dxi-scheduler-item dataField="text" [isRequired]="true">
+                <dxo-scheduler-label text="Betreff"></dxo-scheduler-label>
+            </dxi-scheduler-item>
+
+            <!-- Start- und Enddatum (Date/Time) -->
+            <dxi-scheduler-item name="startDateGroup">
+                <dxi-scheduler-item
+                    dataField="startDate"
+                    editorType="dxDateBox"
+                    [isRequired]="true"
+                    [editorOptions]="{
+                        type: 'datetime',
+                        displayFormat: 'dd.MM.yyyy HH:mm',
+                        required: true,
+                    }">
+                </dxi-scheduler-item>
+            </dxi-scheduler-item>
+            <dxi-scheduler-item name="endDateGroup">
+                <dxi-scheduler-item
+                    dataField="endDate"
+                    editorType="dxDateBox"
+                    [editorOptions]="{
+                        type: 'datetime',
+                        displayFormat: 'dd.MM.yyyy HH:mm'
+                    }">
+                </dxi-scheduler-item>
+            </dxi-scheduler-item>
+
+            <!-- bezugszeitraum (Vormonat/Laufender Monat) -->
+            <dxi-scheduler-item dataField="period" editorType="dxRadioGroup" [isRequired]="true"
+                [editorOptions]="{
+                        items:['Laufender Monat (L)', 'Vormonat (V)'], 
+                        layout:'horizontal', 
+                    }"
+            >
+                <dxo-scheduler-label text="Bezugszeitraum"></dxo-scheduler-label>
+            </dxi-scheduler-item>
+
+            <!-- Wiederholung -->
+            <dxi-scheduler-item dataField="repeatType" editorType="dxSelectBox" [isRequired]="true"
+                [editorOptions]="{
+                    items: repeatOptions,
+                    valueExpr: 'id',
+                    displayExpr: 'text',
+                }">
+                <dxo-scheduler-label text="Wiederholung"></dxo-scheduler-label>
+            </dxi-scheduler-item>
+
+            <!-- Wiederholungsregel (hidden) -->
+            <dxi-scheduler-item name="weekdays" template="weekdaysTemplate" [editorOptions]="{visible: true,}" [isRequired]="true">
+                <dxo-scheduler-label text="Wochentage"></dxo-scheduler-label>
+            </dxi-scheduler-item>
+
+            <div *dxTemplate="let data of 'weekdaysTemplate'">
+                <div class="weekday-row">
+                    <dx-check-box
+                    *ngFor="let day of weekdayOptions"
+                    [text]="day.text"
+                    [value]="isWeekdaySelected(day.id)"
+                    (onValueChanged)="onWeekdayChanged(day.id, $event.value)">
+                    </dx-check-box>
+                </div>
+            </div>
+
+            <!-- Beschreibung -->
+            <dxi-scheduler-item dataField="description" editorType="dxTextArea">
+                <dxo-scheduler-label text="Beschreibung"></dxo-scheduler-label>
+            </dxi-scheduler-item>
+
+            <!-- Gruppe für die Wiederholung-->
+            <dxi-scheduler-item name="recurrenceGroup"></dxi-scheduler-item>
+        </dxo-scheduler-form>
+    </dxo-scheduler-editing>
+
+</dx-scheduler>
